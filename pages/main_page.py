@@ -1,8 +1,9 @@
-from pages.base_page import BasePage
 from locators.main_page_locators import MainPageLocators
+from pages.header import Header
+from pages.reqional_settings_popup import RegionalPopup
 
 
-class MainPage(BasePage):
+class MainPage(Header, RegionalPopup):
 
     def enter_email(self, email):
         self.send_keys(MainPageLocators.EMAIL_FIELD, email)

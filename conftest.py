@@ -2,10 +2,7 @@ import pytest
 from api.my_requests import MyRequests
 from api.helpers import testing_data as TD
 from db.litecart_database import get_db_connection
-from locators.cart_page_locators import CartPageLocators
 from selenium import webdriver
-from helpers.common_logic import CommonLogic
-from locators.header_locators import HeaderLocators
 from db.db_constants import DBConstants
 from helpers.testing_data import TestUserData
 

@@ -9,4 +9,7 @@ class CommonLogic(MainPage):
             .click_on_login_button()
         return self
 
-
+    @staticmethod
+    def get_float_price(price: str):
+        cast_price = ''.join(filter(lambda c: c.isdigit() or c == '.', price))
+        return float(cast_price)

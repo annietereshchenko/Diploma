@@ -1,8 +1,8 @@
 from time import sleep
-
 from helpers.models import Duck
 from pages.base_page import BasePage
 from locators.cart_page_locators import CartPageLocators
+from helpers.common_logic import CommonLogic
 
 
 class CartPage(BasePage):
@@ -20,8 +20,7 @@ class CartPage(BasePage):
 
     def get_total_price(self):
         price = self.get_text_of_element(CartPageLocators.TOTAL_PRICE)
-        cast_price = ''.join(filter(lambda c: c.isdigit() or c == '.', price))
-        return float(cast_price)
+        return CommonLogic.get_float_price(price)
 
     def remove_products(self):
         self.find_element(CartPageLocators.REMOVE_BUTTON).click()
@@ -30,29 +29,24 @@ class CartPage(BasePage):
     def is_products_card_not_displayed(self):
         return self.is_element_not_visible(CartPageLocators.PRODUCT_FORM)
 
-    def _get_products_table_rows(self):
-        html_table = self.find_element(CartPageLocators.PRODUCTS_TABLE)
-        items = html_table.find_elements(*CartPageLocators.TAG_TR)
-        rows_list = filter(lambda r: not r.get_attribute('class'), items)
-        return rows_list
-
     # ПЕРЕИМЕНОВАТЬ ФУНКЦИИ, ОПРЕДЕЛИТЬСЯ, ЛИБО DUCKS, ЛИБО PRODUCTS
 
     def get_ducks_from_cart(self):
-        rows = self._get_products_table_rows()
-        for row in rows:
+        rows_list = self.find_elements(CartPageLocators.PRODUCTS_TABLE_ROWS)
+        list_without_header_footer = filter(lambda r: not r.get_attribute('class'), rows_list)
+        for row in list_without_header_footer:
             if len(row.find_elements(*CartPageLocators.PRODUCT_NAME)) == 0:
                 continue
             name = row.find_element(*CartPageLocators.PRODUCT_NAME).text
             price = row.find_element(*CartPageLocators.PRODUCT_PRICE).text
-            cast_price = ''.join(filter(lambda c: c.isdigit() or c == '.', price))
-            self.ducks_objects_list.append(Duck(name, float(cast_price)))
+            cast_price = CommonLogic.get_float_price(price)
+            self.ducks_objects_list.append(Duck(name, cast_price))
         return self
 
-    def are_lists_of_products_equal(self, list_od_products_for_adding, list_of_added_products):
-        if len(list_od_products_for_adding) != len(list_od_products_for_adding):
+    def are_lists_of_products_equal(self, list_of_products_for_adding, list_of_added_products):
+        if len(list_of_products_for_adding) != len(list_of_products_for_adding):
             return False
-        for item in list_od_products_for_adding:
+        for item in list_of_products_for_adding:
             if item not in list_of_added_products:
                 return False
         return True

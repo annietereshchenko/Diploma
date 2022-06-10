@@ -1,26 +1,23 @@
 from time import sleep
 from helpers.models import Duck
-from pages.base_page import BasePage
 from locators.products_page_locators import ProductsPageLocators
 from locators.product_page_locators import ProductPageLocators
 from locators.header_locators import HeaderLocators
+from pages.left_menu_component import LeftMenuComponent
+from pages.header import Header
+from helpers.common_logic import CommonLogic
 
 
-class ProductsPage(BasePage):
+class ProductsPage(LeftMenuComponent, Header):
     ducks_objects_list = []
 
-    def _get_ducks_list(self):
-        html_list = self.find_element(ProductsPageLocators.PRODUCTS_LIST)
-        items = html_list.find_elements(*ProductsPageLocators.TAG)
-        return items
-
     def get_ducks_in_list(self):
-        ducks_list = self._get_ducks_list()
+        ducks_list = self.find_elements(ProductsPageLocators.PRODUCTS)
         for item in ducks_list[2:5]:
             name = item.find_element(*ProductsPageLocators.PRODUCT_NAME).text
             price = item.find_element(*ProductsPageLocators.PRODUCT_PRICE_WITHOUT_DISCOUNT).text
-            cast_price = ''.join(filter(lambda c: c.isdigit() or c == '.', price))
-            duck = Duck(name, float(cast_price))
+            cast_price = CommonLogic.get_float_price(price)
+            duck = Duck(name, cast_price)
             self.ducks_objects_list.append(duck)
         return self
 
@@ -34,7 +31,8 @@ class ProductsPage(BasePage):
 
     def add_three_products_to_cart(self):
         for item in range(2, 5):
-            duck = self._get_ducks_list()[item]
+            product_list = self.find_elements(ProductsPageLocators.PRODUCTS)
+            duck = product_list[item]
             duck.click()
             self.add_product_to_cart()
             # если будет время, переписать этот костыль
