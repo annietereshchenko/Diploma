@@ -37,3 +37,12 @@ class BasePage:
 
     def wait_until_title_is(self, title, timeout=5):
         WebDriverWait(self.browser, timeout).until(EC.title_is(title))
+
+    def wait_until_element_visible(self, locator):
+        WebDriverWait(self.browser, 10).until(EC.visibility_of_element_located(locator))
+
+    def wait_until_element_invisible(self, locator):
+        WebDriverWait(self.browser, 10).until(EC.invisibility_of_element_located(locator))
+
+    def wait_until_text_not_present(self, locator, text):
+        WebDriverWait(self.browser, 10).until_not(EC.text_to_be_present_in_element(locator, text))

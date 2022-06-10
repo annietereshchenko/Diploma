@@ -1,11 +1,10 @@
-from time import sleep
 from helpers.models import Duck
 from locators.products_page_locators import ProductsPageLocators
-from locators.product_page_locators import ProductPageLocators
 from locators.header_locators import HeaderLocators
 from pages.left_menu_component import LeftMenuComponent
 from pages.header import Header
 from helpers.common_logic import CommonLogic
+from pages.product_page import ProductPageLocators
 
 
 class ProductsPage(LeftMenuComponent, Header):
@@ -25,8 +24,8 @@ class ProductsPage(LeftMenuComponent, Header):
 
     def add_product_to_cart(self):
         self.find_element(ProductPageLocators.ADD_TO_CART_BUTTON).click()
-        # если будет время, переписать этот костыль
-        sleep(1)
+        self.wait_until_element_visible(ProductPageLocators.ADD_TO_CART_BUTTON_WITH_CURSOR)
+        self.wait_until_element_invisible(ProductPageLocators.ADD_TO_CART_BUTTON_WITH_CURSOR)
         return self
 
     def add_three_products_to_cart(self):
@@ -35,11 +34,10 @@ class ProductsPage(LeftMenuComponent, Header):
             duck = product_list[item]
             duck.click()
             self.add_product_to_cart()
-            # если будет время, переписать этот костыль
-            sleep(1)
             self.find_element(HeaderLocators.BREAD_CRUMB_RUBBER_DUCKS).click()
         return self
 
     def open_product(self):
-        self.find_elements(ProductsPageLocators.PRODUCTS)[2].click()
+        products_list = self.find_elements(ProductsPageLocators.PRODUCTS)
+        products_list[2].click()
         return self

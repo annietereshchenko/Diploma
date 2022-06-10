@@ -1,4 +1,3 @@
-from time import sleep
 from helpers.models import Duck
 from pages.base_page import BasePage
 from locators.cart_page_locators import CartPageLocators
@@ -9,10 +8,10 @@ class CartPage(BasePage):
     ducks_objects_list = []
 
     def change_quantity_of_added_product(self, quantity: int):
+        quantity_before_changing = self.get_text_of_element(CartPageLocators.PRODUCT_QUANTITY_IN_TABLE)
         self.clear_input_field_and_send_keys(CartPageLocators.PRODUCT_QUANTITY, str(quantity))
         self.find_element(CartPageLocators.UPDATE_QUANTITY_BUTTON).click()
-        # ИЗБАВИТЬСЯ ОТ ЭТОГО КОСТЫЛЯ
-        sleep(1)
+        self.wait_until_text_not_present(CartPageLocators.PRODUCT_QUANTITY_IN_TABLE, quantity_before_changing)
         return self
 
     def get_count_of_added_products(self):

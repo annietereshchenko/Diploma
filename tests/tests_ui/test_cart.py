@@ -28,6 +28,7 @@ class TestCart:
             .login_with_registered_user()
 
         ProductsPage(browser) \
+            .open_list_of_ducks() \
             .open_product() \
             .add_product_to_cart() \
             .open_cart()
@@ -37,11 +38,12 @@ class TestCart:
 
         assert cart_page.get_count_of_added_products() == TestCartData.QUANTITY_3
 
-    def test_add_change_count_of_products_check_price(self, browser, delete_products_from_cart):
+    def test_change_count_of_products_check_price(self, browser, delete_products_from_cart):
         CommonLogic(browser) \
             .login_with_registered_user()
 
         products_page = ProductsPage(browser) \
+            .open_list_of_ducks() \
             .open_product() \
             .add_product_to_cart()
 
