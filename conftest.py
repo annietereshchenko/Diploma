@@ -2,9 +2,10 @@ import pytest
 from api.my_requests import MyRequests
 from api.helpers import testing_data as TD
 from db.litecart_database import get_db_connection
+from db.tabels.orders_table import OrdersTable
+from db.tabels.cart_items_table import CartItemsTable
+from db.tabels.customers_table import CustomerTables
 from selenium import webdriver
-from db.db_constants import DBConstants
-from helpers.testing_data import TestUserData
 
 
 @pytest.fixture()
@@ -37,12 +38,12 @@ def delete_user_after_update():
 
 @pytest.fixture()
 def browser():
-    browser = webdriver.Chrome("C:/Users/Admin/PycharmProjects/automationpractice/chromedriver")
-    browser.maximize_window()
-    browser.implicitly_wait(5)
-    browser.get('http://localhost/litecart/en/')
-    yield browser
-    browser.quit()
+    driver = webdriver.Chrome(executable_path="C:/Users/Admin/PycharmProjects/automationpractice/chromedriver")
+    driver.maximize_window()
+    driver.implicitly_wait(5)
+    driver.get('http://localhost/litecart/en/')
+    yield driver
+    driver.quit()
 
 
 @pytest.fixture(scope='session')
@@ -55,26 +56,18 @@ def db_connection():
 @pytest.fixture()
 def revert_user_names(db_connection):
     yield
-    cursor = db_connection.cursor()
-    update_user_names = f"UPDATE lc_customers SET firstname = '{TestUserData.FIRST_NAME}', " \
-                        f"lastname = '{TestUserData.LAST_NAME}' WHERE id={DBConstants.TEST_CUSTOMER_ID}"
-    cursor.execute(update_user_names)
-    db_connection.commit()
+    CustomerTables.revert_user_names(db_connection)
 
 
 @pytest.fixture()
 def delete_orders_of_customer(db_connection):
+    OrdersTable.delete_orders_of_customer(db_connection)
     yield
-    cursor = db_connection.cursor()
-    delete_orders = f"DELETE FROM lc_orders WHERE customer_id={DBConstants.TEST_CUSTOMER_ID}"
-    cursor.execute(delete_orders)
-    db_connection.commit()
+    OrdersTable.delete_orders_of_customer(db_connection)
 
 
 @pytest.fixture()
 def delete_products_from_cart(db_connection):
+    CartItemsTable.delete_products_from_cart(db_connection)
     yield
-    cursor = db_connection.cursor()
-    delete_orders = f"DELETE FROM lc_cart_items WHERE customer_id={DBConstants.TEST_CUSTOMER_ID}"
-    cursor.execute(delete_orders)
-    db_connection.commit()
+    CartItemsTable.delete_products_from_cart(db_connection)

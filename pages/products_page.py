@@ -1,4 +1,4 @@
-from helpers.models import Duck
+from helpers.models import Product
 from locators.products_page_locators import ProductsPageLocators
 from locators.header_locators import HeaderLocators
 from pages.left_menu_component import LeftMenuComponent
@@ -8,31 +8,28 @@ from pages.product_page import ProductPageLocators
 
 
 class ProductsPage(LeftMenuComponent, Header):
-    ducks_objects_list = []
+    products_objects_list = []
 
-    def get_ducks_in_list(self):
-        ducks_list = self.find_elements(ProductsPageLocators.PRODUCTS)
-        for item in ducks_list[2:5]:
+    def get_products_in_list(self):
+        products_list = self.find_elements(ProductsPageLocators.PRODUCTS)
+        for item in products_list[2:5]:
             name = item.find_element(*ProductsPageLocators.PRODUCT_NAME).text
             price = item.find_element(*ProductsPageLocators.PRODUCT_PRICE_WITHOUT_DISCOUNT).text
             cast_price = CommonLogic.get_float_price(price)
-            duck = Duck(name, cast_price)
-            self.ducks_objects_list.append(duck)
+            self.products_objects_list.append(Product(name, cast_price))
         return self
 
-    # ПЕРЕИМЕНОВАТЬ ФУНКЦИИ, ОПРЕДЕЛИТЬСЯ, ЛИБО DUCKS, ЛИБО PRODUCTS
-
     def add_product_to_cart(self):
+        count_before_adding_product = self.get_text_of_element(HeaderLocators.COUNTER)
         self.find_element(ProductPageLocators.ADD_TO_CART_BUTTON).click()
-        self.wait_until_element_visible(ProductPageLocators.ADD_TO_CART_BUTTON_WITH_CURSOR)
-        self.wait_until_element_invisible(ProductPageLocators.ADD_TO_CART_BUTTON_WITH_CURSOR)
+        self.wait_until_text_not_present(HeaderLocators.COUNTER, count_before_adding_product)
         return self
 
     def add_three_products_to_cart(self):
         for item in range(2, 5):
             product_list = self.find_elements(ProductsPageLocators.PRODUCTS)
-            duck = product_list[item]
-            duck.click()
+            product = product_list[item]
+            product.click()
             self.add_product_to_cart()
             self.find_element(HeaderLocators.BREAD_CRUMB_RUBBER_DUCKS).click()
         return self

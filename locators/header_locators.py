@@ -7,4 +7,4 @@ class HeaderLocators:
     COUNTRY = (By.CLASS_NAME, 'country')
     CHECKOUT = (By.LINK_TEXT, 'Checkout »')
     BREAD_CRUMB_RUBBER_DUCKS = (By.LINK_TEXT, 'Rubber Ducks')
-    ADDED_PRODUCTS_QUANTITY = (By.CSS_SELECTOR, '#cart > a.content > span.quantity')
+    COUNTER = (By.CSS_SELECTOR, '#cart .content .quantity')

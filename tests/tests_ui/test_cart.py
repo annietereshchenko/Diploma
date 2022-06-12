@@ -12,23 +12,23 @@ class TestCart:
             .login_with_registered_user()
 
         product_page = ProductsPage(browser) \
-            .open_list_of_ducks() \
-            .get_ducks_in_list() \
+            .open_list_of_products() \
+            .get_products_in_list() \
             .add_three_products_to_cart()\
             .open_cart()
 
         cart_page = CartPage(browser) \
-            .get_ducks_from_cart()
+            .get_products_in_cart()
 
-        assert cart_page.are_lists_of_products_equal(product_page.ducks_objects_list,
-                                                     cart_page.ducks_objects_list) is True
+        assert cart_page.are_lists_of_products_equal(product_page.products_objects_list,
+                                                     cart_page.products_objects_list) is True
 
     def test_change_count_of_products_check_count(self, browser, delete_products_from_cart):
         CommonLogic(browser) \
             .login_with_registered_user()
 
         ProductsPage(browser) \
-            .open_list_of_ducks() \
+            .open_list_of_products() \
             .open_product() \
             .add_product_to_cart() \
             .open_cart()
@@ -43,7 +43,7 @@ class TestCart:
             .login_with_registered_user()
 
         products_page = ProductsPage(browser) \
-            .open_list_of_ducks() \
+            .open_list_of_products() \
             .open_product() \
             .add_product_to_cart()
 
@@ -63,7 +63,7 @@ class TestCart:
             .login_with_registered_user()
 
         ProductsPage(browser) \
-            .open_list_of_ducks() \
+            .open_list_of_products() \
             .open_product() \
             .add_product_to_cart()\
             .open_cart()

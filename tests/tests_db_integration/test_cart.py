@@ -1,9 +1,7 @@
-from pages.left_menu_component import LeftMenuComponent
 from helpers.common_logic import CommonLogic
 from pages.products_page import ProductsPage
-from pages.header import Header
 from pages.cart_page import CartPage
-from db.orders_table import get_orders_by_customer_id
+from db.tabels.orders_table import OrdersTable
 
 
 class TestCart:
@@ -12,13 +10,13 @@ class TestCart:
             .login_with_registered_user()
 
         ProductsPage(browser) \
-            .open_list_of_ducks() \
+            .open_list_of_products() \
             .add_three_products_to_cart() \
             .open_cart()
 
         CartPage(browser) \
             .confirm_order()
 
-        orders_count_of_customer = get_orders_by_customer_id(db_connection)
+        orders_count_of_customer = OrdersTable.get_orders_by_customer_id(db_connection)
 
         assert orders_count_of_customer == 1

@@ -3,8 +3,8 @@ from locators.left_menu_component_locators import LeftMenuComponentLocators
 
 
 class LeftMenuComponent(BasePage):
-    def open_list_of_ducks(self):
-        self.find_element(LeftMenuComponentLocators.DUCKS_LIST_LINK).click()
+    def open_list_of_products(self):
+        self.find_element(LeftMenuComponentLocators.PRODUCTS_LIST_LINK).click()
         return self
 
     def open_account_settings(self):

@@ -1,11 +1,11 @@
-from helpers.models import Duck
+from helpers.models import Product
 from pages.base_page import BasePage
 from locators.cart_page_locators import CartPageLocators
 from helpers.common_logic import CommonLogic
 
 
 class CartPage(BasePage):
-    ducks_objects_list = []
+    products_objects_list = []
 
     def change_quantity_of_added_product(self, quantity: int):
         quantity_before_changing = self.get_text_of_element(CartPageLocators.PRODUCT_QUANTITY_IN_TABLE)
@@ -28,9 +28,7 @@ class CartPage(BasePage):
     def is_products_card_not_displayed(self):
         return self.is_element_not_visible(CartPageLocators.PRODUCT_FORM)
 
-    # ПЕРЕИМЕНОВАТЬ ФУНКЦИИ, ОПРЕДЕЛИТЬСЯ, ЛИБО DUCKS, ЛИБО PRODUCTS
-
-    def get_ducks_from_cart(self):
+    def get_products_in_cart(self):
         rows_list = self.find_elements(CartPageLocators.PRODUCTS_TABLE_ROWS)
         list_without_header_footer = filter(lambda r: not r.get_attribute('class'), rows_list)
         for row in list_without_header_footer:
@@ -39,7 +37,7 @@ class CartPage(BasePage):
             name = row.find_element(*CartPageLocators.PRODUCT_NAME).text
             price = row.find_element(*CartPageLocators.PRODUCT_PRICE).text
             cast_price = CommonLogic.get_float_price(price)
-            self.ducks_objects_list.append(Duck(name, cast_price))
+            self.products_objects_list.append(Product(name, cast_price))
         return self
 
     def are_lists_of_products_equal(self, list_of_products_for_adding, list_of_added_products):

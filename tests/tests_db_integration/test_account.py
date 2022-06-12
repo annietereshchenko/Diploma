@@ -1,6 +1,5 @@
-import allure
 from pages.account_page import AccountPage
-from db.customers_table import get_test_user_names_by_id
+from db.tabels.customers_table import CustomerTables
 from helpers.common_logic import CommonLogic
 from helpers.testing_data import TestUserData
 
@@ -16,6 +15,6 @@ class TestAccount:
             .edit_last_name(TestUserData.EDITED_LAST_NAME) \
             .click_on_save_button()
 
-        names_in_database = get_test_user_names_by_id(db_connection=db_connection)
+        names_in_database = CustomerTables.get_test_user_names_by_id(db_connection=db_connection)
 
         assert names_in_database == (TestUserData.EDITED_FIRST_NAME, TestUserData.EDITED_LAST_NAME)
