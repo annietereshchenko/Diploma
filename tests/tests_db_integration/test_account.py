@@ -1,10 +1,14 @@
+import allure
 from pages.account_page import AccountPage
 from db.tabels.customers_table import CustomerTables
 from helpers.common_logic import CommonLogic
 from helpers.testing_data import TestUserData
 
 
+@allure.epic('Account')
 class TestAccount:
+    @allure.feature('Edit a user')
+    @allure.description('Editing the first and the last names and checking the changes in DB')
     def test_change_name(self, browser, db_connection, revert_user_names):
         CommonLogic(browser). \
             login_with_registered_user()

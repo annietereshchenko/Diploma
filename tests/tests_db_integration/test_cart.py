@@ -1,11 +1,16 @@
+import allure
 from helpers.common_logic import CommonLogic
 from pages.products_page import ProductsPage
 from pages.cart_page import CartPage
 from db.tabels.orders_table import OrdersTable
 
 
+@allure.epic('Cart')
 class TestCart:
-    def test_place_order_check_order_in_db(self, browser, db_connection, delete_orders_of_customer):
+    @allure.feature('Orders')
+    @allure.description('Placing an order and checking it in DB')
+    def test_place_order_check_order_in_db(self, browser, db_connection,
+                                           delete_products_from_cart, delete_orders_of_customer):
         CommonLogic(browser) \
             .login_with_registered_user()
 
