@@ -1,7 +1,6 @@
 from types import SimpleNamespace
 import json
 from api.models.category import Category
-from api.models.tag import Tag
 import allure
 
 
@@ -24,7 +23,7 @@ def _photo_compare(list1: list, list2: list):
 
 
 class Pet:
-    def __init__(self, id: int, category: Category, name: str, photoUrls: list, tags: [Tag], status: str):
+    def __init__(self, id: int, category: Category, name: str, photoUrls: list, tags: list, status: str):
         self.id = id
         self.category = category
         self.name = name
